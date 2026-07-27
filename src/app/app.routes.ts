@@ -14,4 +14,8 @@ export const routes: Routes = [
     path: 'formulario',
     loadComponent: () => import('./pages/formulario/formulario.page').then( m => m.FormularioPage)
   },
+  {
+    path: 'mostrar',
+    loadComponent: () => import('./pages/mostrar/mostrar.page').then( m => m.MostrarPage)
+  },
 ];

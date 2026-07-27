@@ -72,9 +72,10 @@ export class FormularioPage implements OnInit {
   constructor(private supabaseService: SupabaseService) {}
 
   async cargar(){
-    const {data,error} = await this.supabaseService.supabase.from("formulario_demo").select("*");
-    console.log("datos recibidos",data);
+    const {data} = await this.supabaseService.supabase.from("formulario_demo").select("*");
+    console.log('datos recibidos:',data);
   }
+
   ionViewWillEnter(){
     this.cargar();
   }
