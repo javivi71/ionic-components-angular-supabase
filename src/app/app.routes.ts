@@ -17,5 +17,9 @@ export const routes: Routes = [
   {
     path: 'mostrar',
     loadComponent: () => import('./pages/mostrar/mostrar.page').then( m => m.MostrarPage)
+  },  {
+    path: 'borrar',
+    loadComponent: () => import('./pages/borrar/borrar.page').then( m => m.BorrarPage)
   },
+
 ];

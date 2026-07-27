@@ -1,0 +1,115 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Eliminar Usuarios</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button (click)="cargarDatos()" [disabled]="isLoading">
+        <ion-icon name="refresh-outline" [class.spinning]="isLoading"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Eliminar Usuarios</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="loader-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando datos...</p>
+  </div>
+
+  <!-- Contador y botones de acción -->
+  <div *ngIf="!isLoading && datosClientes.length > 0" class="header-actions">
+    <ion-text color="medium">
+      <small>
+        <ion-icon name="people-outline"></ion-icon>
+        Total: {{datosClientes.length}} registros
+      </small>
+    </ion-text>
+    <ion-button 
+      color="danger" 
+      fill="outline" 
+      size="small"
+      (click)="confirmarEliminacionTodos()"
+      [disabled]="isDeleting">
+      <ion-icon name="trash-outline" slot="start"></ion-icon>
+      Eliminar Todos
+    </ion-button>
+  </div>
+
+  <!-- Mensaje cuando no hay datos -->
+  <div *ngIf="!isLoading && datosClientes.length === 0" class="empty-state">
+    <ion-icon name="person-outline" class="empty-icon"></ion-icon>
+    <h3>No hay registros</h3>
+    <p>No hay usuarios para eliminar</p>
+    <ion-button (click)="volver()" fill="outline">
+      <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+      Volver al listado
+    </ion-button>
+  </div>
+
+  <!-- Lista de registros para eliminar -->
+  <div *ngIf="!isLoading && datosClientes.length > 0">
+    <ion-card *ngFor="let dato of datosClientes" class="delete-card">
+      <ion-card-header>
+        <ion-card-title>
+          <span class="id-badge">#{{dato.id}}</span>
+          {{dato.nombre || 'Sin nombre'}}
+        </ion-card-title>
+        <ion-card-subtitle *ngIf="dato.email">
+          <ion-icon name="mail-outline"></ion-icon>
+          {{dato.email}}
+        </ion-card-subtitle>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <div class="info-row">
+          <ion-label>
+            <p><strong>Edad:</strong> {{dato.edad || 'No especificada'}}</p>
+            <p><strong>País:</strong> {{dato.pais || 'No especificado'}}</p>
+            <p><strong>Género:</strong> {{dato.genero || 'No especificado'}}</p>
+          </ion-label>
+        </div>
+        
+        <ion-button 
+          color="danger" 
+          expand="block" 
+          (click)="confirmarEliminacion(dato)"
+          [disabled]="isDeleting">
+          <ion-icon name="trash-outline" slot="start"></ion-icon>
+          Eliminar
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Alert de confirmación -->
+  <ion-alert
+    [isOpen]="showAlert"
+    header="Confirmar Eliminación"
+    [message]="'¿Estás seguro de que deseas eliminar el registro #' + (registroAEliminar?.id || '') + ' de ' + (registroAEliminar?.nombre || '') + '?'"
+    [buttons]="alertButtons"
+    (didDismiss)="showAlert = false">
+  </ion-alert>
+
+  <!-- Toast de notificación -->
+  <ion-toast
+    [isOpen]="showToast"
+    [message]="toastMessage"
+    [color]="toastColor"
+    [duration]="3000"
+    position="bottom"
+    (didDismiss)="showToast = false">
+  </ion-toast>
+</ion-content>
